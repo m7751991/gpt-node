@@ -6,7 +6,6 @@ const OpenAIApiMap = new WeakMap()
 
 const getConfiguration = (config)=>{
     if (keyMap.get(config.apiKey)) {
-      console.log(11321);
       return  keyMap.get(config.apiKey)
     }else {
       const configuration = new Configuration(config);
