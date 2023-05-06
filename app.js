@@ -21,6 +21,7 @@ app.use(serve(__dirname + '/src/public'));
 
 router.get('/', indexController.getIndex);
 router.post('/api/createCompletion', openAIApiController.createCompletion);
+router.post('/api/getModelsList', openAIApiController.getModelsList);
 
 app.use(router.routes());
 
