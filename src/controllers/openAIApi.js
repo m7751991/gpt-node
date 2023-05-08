@@ -6,10 +6,10 @@ const createCompletion = async (ctx) => {
   let response
   switch (model) {
     case 'text-davinci-003':
-       response =  service.textDavinci(ctx,{config,options})
+       response = await service.textDavinci(ctx,{config,options})
       break;
     case 'gpt-3.5-turbo':
-       response =  service.model3(ctx,{config,options})
+       response =  await service.model3(ctx,{config,options})
       break;
     default:
       response = {

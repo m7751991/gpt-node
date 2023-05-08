@@ -1,4 +1,4 @@
-const {getOpenAI, getConfiguration, generatorParams} = require('../utils');
+const {getOpenAI, getConfiguration} = require('../utils');
 
 
 const textDavinci =  async (ctx,{config,options})=>{
@@ -16,12 +16,11 @@ const model3 =  async (ctx,{config,options})=>{
     try {
         const configuration = getConfiguration(config)
         const openai = getOpenAI(configuration);
-        const params = generatorParams(options)
-        console.log(params,'????');
-        const response =  await openai.createChatCompletion(params)
+        console.log('请求参数：',options);
+        const response =  await openai.createChatCompletion(options)
         return response.data;
     } catch (error) {
-        console.log(error);
+        console.log('报错了:'+ error.res);
         return error
     }
 }

@@ -25,21 +25,7 @@ const getOpenAI = (configuration)=>{
     }
 }
 
-const generatorParams = (value)=>{
-    const {messages} = value
-    let prevContent = '';
-    const transformedArr = messages.map((obj) => {
-    const content = prevContent +`Q: ${obj.question} A: ${obj.answer}`;
-       prevContent = content;
-       return { role: 'user', content };
-    });
-    value.messages =transformedArr
-    // console.log(transformedArr,'transformedArr');
-    return value;
-}
-
 module.exports= {
     getConfiguration,
     getOpenAI,
-    generatorParams
 }
