@@ -1,50 +1,32 @@
-const ai = require("openai");
-const { Configuration, OpenAIApi }  = ai
-const keyMap = new Map();
-const OpenAIApiMap = new WeakMap()
-
-
-const getConfiguration = (config)=>{
-    if (keyMap.get(config.apiKey)) {
-      return  keyMap.get(config.apiKey)
-    }else {
-      const configuration = new Configuration(config);
-      keyMap.set(config.apiKey,configuration)
-      return configuration
-    }
-}
-
-const getOpenAI = (configuration)=>{
-    if (OpenAIApiMap.get(configuration)) {
-      return  OpenAIApiMap.get(configuration)
-    }else {
-    const openai = new OpenAIApi(configuration);
-      OpenAIApiMap.set(configuration,openai)
-      return openai
-    }
-}
+const service = require("../service/openaiApi")
 
 const createCompletion = async (ctx) => {
   const {config,options} = ctx.request.body
-  try {
-    const configuration = getConfiguration(config)
-    const openai = getOpenAI(configuration);
-    const response =  await openai.createCompletion(options)
-     ctx.body = {
-      data: response.data
-    };
-  } catch (error) {
-    console.log("error:"+ error);
-     ctx.body = {
-      data: error
-    };
+  const {model} = options;
+  let response
+  switch (model) {
+    case 'text-davinci-003':
+       response =  service.textDavinci(ctx,{config,options})
+      break;
+    case 'gpt-3.5-turbo':
+       response =  service.model3(ctx,{config,options})
+      break;
+    default:
+      response = {
+        msg:'没有匹配到相关模型，请检查model参数！',
+        status:400,
+      }
+      break;
   }
+     ctx.body = {
+      data: response
+    };
 };
+
 
 
 const getModelsList = async (ctx)=>{
   const {config} = ctx.request.body
-  console.log();
   try {
     const configuration = getConfiguration(config)
     const openai = getOpenAI(configuration);
@@ -58,7 +40,13 @@ const getModelsList = async (ctx)=>{
   }
 }
 
+const setApiKey = async (ctx) =>{
+  const {key} = ctx.request.body
+
+}
+
 module.exports = {
   createCompletion,
   getModelsList,
+  setApiKey
 };
