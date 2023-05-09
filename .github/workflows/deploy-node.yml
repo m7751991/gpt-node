@@ -31,7 +31,7 @@ jobs:
     #   run: npm run build
    #上传打包资源
     - name: Deploy
-        uses: easingthemes/ssh-deploy@main
+        uses: easingthemes/ssh-deploy@master
          env:
               # 服务器SSH私钥
               # SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
