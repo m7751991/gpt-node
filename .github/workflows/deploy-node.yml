@@ -29,7 +29,7 @@
             source: "./*"
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
-            password: ${{ secrets.SSH_PASSWORD }}
+            password: Mm506045318
             target: ${{secrets.REMOTE_PATH_GPT}}
             EXCLUDE: "/dist/, /node_modules/"
             # rm: true
