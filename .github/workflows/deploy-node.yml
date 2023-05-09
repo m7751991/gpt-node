@@ -18,14 +18,31 @@ jobs:
       matrix:
         node-version: [14.x, 16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@master
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install
-    - run: npm run build 
-  
+    - name: Install
+      run: npm run install
+    # - name: Build
+    #   run: npm run build
+   #上传打包资源
+    - name: Deploy
+        uses: easingthemes/ssh-deploy@main
+         env:
+              # 服务器SSH私钥
+              # SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+              ARGS: "-rltgoDzvO"
+              SOURCE: "./**"
+              # 服务器IP地址
+              REMOTE_HOST: ${{ secrets.SSH_HOST }}
+              # 服务器用户名
+              REMOTE_USER: ${{ secrets.SSH_USER }}
+              REMOTE_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+              # 上传文件存放地址
+              TARGET:  ${{ secrets.REMOTE_PATH_GPT }}
+              EXCLUDE: "/dist/, /node_modules/"
+
