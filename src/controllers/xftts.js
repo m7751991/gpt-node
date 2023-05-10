@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require("path")
+const service = require('../service/openaiApi')
 
 const getAudio = (ctx) => {
   // const name = ctx.request.query.name;  
@@ -25,6 +26,11 @@ const getAudio = (ctx) => {
   }
 };
 
+const test =async ()=>{
+  await service.test()
+}
+
 module.exports = {
   getAudio,
+  test
 };

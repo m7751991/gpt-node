@@ -24,6 +24,7 @@ router.get('/test', indexController.getIndex);
 router.post('/api/createCompletion', openAIApiController.createCompletion);
 router.post('/api/getModelsList', openAIApiController.getModelsList);
 router.get('/api/getAudio', xfttsController.getAudio);
+router.get('/api/test', xfttsController.test);
 
 app.use(router.routes());
 

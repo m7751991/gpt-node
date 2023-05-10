@@ -41,10 +41,16 @@ let date = (new Date().toUTCString())
 let wssUrl = config.hostUrl + "?authorization=" + getAuthStr(date) + "&date=" + date + "&host=" + config.host
 let ws
 const wsSocket = ()=>{
+
+    return new Promise((resolve,reject)=>{
+
+
+
     ws= new WebSocket(wssUrl)
     // 连接建立完毕，读取数据进行识别
     ws.on('open', () => {
-        log.info("websocket connect!")
+        console.log("websocket connect!")
+        resolve()
         // 如果之前保存过音频文件，删除之
         // if (fs.existsSync('./test.mp3')) {
         //     fs.unlink('./test.mp3', (err) => {
@@ -58,14 +64,14 @@ const wsSocket = ()=>{
     // 得到结果后进行处理，仅供参考，具体业务具体对待
     ws.on('message', (data, err) => {
         if (err) {
-            log.error('message error: ' + err)
+            console.log('message error: ' + err)
             return
         }
 
         let res = JSON.parse(data)
 
         if (res.code != 0) {
-            log.error(`${res.code}: ${res.message}`)
+            console.log(`${res.code}: ${res.message}`)
             ws.close()
             return
         }
@@ -82,13 +88,17 @@ const wsSocket = ()=>{
 
     // 资源释放
     ws.on('close', () => {
-        log.info('connect close!')
+        console.log('connect close!')
+        reject()
     })
 
     // 连接错误
     ws.on('error', (err) => {
-        log.error("websocket connect err: " + err)
+        console.log("websocket connect err: " + err)
+        reject()
     })
+})
+
 }
 
 
@@ -103,6 +113,7 @@ function getAuthStr(date) {
     return authStr
 }
 
+let fileName 
 // 传输数据
 function send(text) {
     let frame = {
@@ -125,6 +136,12 @@ function send(text) {
         }
     }
     console.log('生成语音');
+    let filePath = path.join(__dirname, '../public/audio/test.mp3')
+    try {
+      fs.rmSync(filePath,{force:true})
+    } catch (error) {
+      console.log(error);        
+    }
     ws.send(JSON.stringify(frame))
 }
 
@@ -132,7 +149,7 @@ function send(text) {
 function save(data) {
     fs.writeFile(path.join(__dirname, '../public/audio/test.mp3'), data, { flag: 'a' }, (err) => {
         if (err) {
-            log.error('save error: ' + err)
+            console.log('save error: ' + err)
             return 
         }
         log.info('文件保存成功')
