@@ -10,7 +10,7 @@ const cors = require('@koa/cors');
 
 const indexController = require('./src/controllers/index');
 const openAIApiController = require('./src/controllers/openAIApi');
-// const  xfttsController = require('./src/controllers/xftts');
+const  xfttsController = require('./src/controllers/xftts');
 
 app.use(views(__dirname + '/src/views', {
   extension: 'html'
@@ -23,7 +23,7 @@ app.use(serve(__dirname + '/src/public'));
 router.get('/test', indexController.getIndex);
 router.post('/api/createCompletion', openAIApiController.createCompletion);
 router.post('/api/getModelsList', openAIApiController.getModelsList);
-// router.post('/api/tts', xfttsController.tts);
+router.get('/api/getAudio', xfttsController.getAudio);
 
 app.use(router.routes());
 

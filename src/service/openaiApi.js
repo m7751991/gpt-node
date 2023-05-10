@@ -17,17 +17,17 @@ const textDavinci =  async (ctx,{config,options})=>{
     }
 }
 const model3 =  async (ctx,{config,options})=>{
-    if (!ws) {
-        socket.wsSocket()
-        ws = true
-    }
+    // if (!ws) {
+    //     socket.wsSocket()
+    //     ws = true
+    // }
     try {
         const configuration = getConfiguration(config)
         const openai = getOpenAI(configuration);
         console.log('请求参数：',options);
         const response =  await openai.createChatCompletion(options)
-        const text = response.data?.choices[0]?.message.content
-        service.tts(text)
+        const content = response.data?.choices[0]?.message.content
+        // service.tts(content)
         return  content
             
     } catch (error) {
