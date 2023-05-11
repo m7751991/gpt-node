@@ -1,8 +1,5 @@
 const {getOpenAI, getConfiguration} = require('../utils');
-const socket = require('../utils/xfwss')
-const service = require('./xftts.js')
-
-let ws 
+const service = require('../service/azure.js')
 
 
 const textDavinci =  async (ctx,{config,options})=>{
@@ -16,23 +13,18 @@ const textDavinci =  async (ctx,{config,options})=>{
         return error
     }
 }
-const model3 =  async (ctx,{config,options})=>{
-     if (!ws) {
-        await socket.wsSocket();
-        ws = true
-    }
 
+const model3 =  async (ctx,{config,options})=>{
     try {
         const configuration = getConfiguration(config)
         const openai = getOpenAI(configuration);
         console.log('请求参数：',options);
         const response =  await openai.createChatCompletion(options)
         const content = response.data?.choices[0]?.message.content
-        service.tts(content)
-        return  content
-            
+        const url = await service.synthesizer(content)
+        return  {content,audioUrl: url}
     } catch (error) {
-        console.log('报错了:'+ error.res);
+        console.log('报错了:'+ error);
         return error
     }
 }
