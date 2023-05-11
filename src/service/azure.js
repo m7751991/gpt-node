@@ -3,13 +3,14 @@ const readline = require('readline');
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 require('dotenv').config();
 
+
 const subscriptionKey = process.env.AZURE_KEY;
 const serviceRegion = process.env.AZURE_REGION; // e.g., "westus"
 
 const synthesizer = (text) => {
   console.log(text,'texttexttexttext');
     return new Promise((resolve,reject)=>{
-       const filteName = new Date().getTime()+'.wav'
+       const filteName = new Date().getTime()+'.mp3'
        const filePath= path.join(__dirname, '../public/audio/'+filteName);
        const audioConfig = sdk.AudioConfig.fromAudioFileOutput(filePath);
        const speechConfig = sdk.SpeechConfig.fromSubscription(subscriptionKey, serviceRegion);
